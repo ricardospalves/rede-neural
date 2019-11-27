@@ -10,13 +10,51 @@ class Matrix {
       const array = []
 
       for(let j = 0; j < this.cols; j++) {
-        const randomNumber = Math.floor(Math.random() * 10)
-
-        array.push(randomNumber)
+        array.push(0)
       }
 
       this.data.push(array)
     }
+  }
+
+  static arrayToMatrix(array) {
+    const matrix = new Matrix({
+      rows: array.length,
+      cols: 1
+    })
+
+    matrix.map((row, rowIndex) => {
+      return array[rowIndex]
+    })
+
+    return matrix
+  }
+
+  print() {
+    console.table(this.data)
+  }
+
+  randomize() {
+    this.map(() => {
+      const randomNumber = Math.random() * 2 - 1
+
+      return randomNumber
+    })
+  }
+
+  static map(matrix, func) {
+    const newMatrix = new Matrix({
+      rows: matrix.rows,
+      cols: matrix.rows
+    })
+
+    newMatrix.data = newMatrix.data.map((row, rowIndex) => {
+      return row.map((col, colIndex) => {
+        return func(col, rowIndex, colIndex)
+      })
+    })
+
+    return newMatrix
   }
 
   map(func) {
@@ -48,7 +86,7 @@ class Matrix {
     matrix.map((col, colIndex, rowIndex) => {
       let sum = 0
 
-      for(let i = 0; i < b.rows; i++) {
+      for(let i = 0; i < a.cols; i++) {
         const element1 = a.data[colIndex][i]
         const element2 = b.data[i][rowIndex]
 
